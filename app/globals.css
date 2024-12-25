@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 209 79% 48%; /* Changed to #267ECE */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 45 100% 58%; /* Changed to #FFC527 */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 209 79% 48%; /* Changed to match new primary color */
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+  }
+}
+
+.container {
+  max-width: 100%;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+h2{
+  font-size: 30px;
+  font-weight: 600;
+  color: #20272b;
+  line-height: 50px;
+}
+
+/* embla carousel start */
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.hero-one-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Animation for the text sliding from right */
+.animate-slideIn p {
+  animation: slideInFromRight 0.8s ease-out forwards;
+}
+
+.animate-slideIn h2 {
+  animation: slideInFromRight 1s ease-out forwards;
+  animation-delay: 0.9s; /* Delay for h2 */
+}
+
+/* Button animation comes from bottom after h2 */
+.animate-slideIn button {
+  animation: slideInFromBottom 1s ease-out forwards;
+  animation-delay: 1.2s; /* Delay for button */
+}
+
+/* embla carousel end */
+
+/* Embla slider start */
+.embla_two {
+  max-width: 90rem; /* Set width for the container */
+  margin: auto;
+  --slide-height: 19rem; /* Height of each slide */
+  --slide-spacing: 1rem; /* Spacing between slides */
+  --slide-size: 32%; /* 3 slides in one view (100%/3) */
+  /* gap: 3rem; */
+}
+
+.embla__container_two {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1); /* Adjust for spacing */
+}
+
+.embla__slide_two {
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 var(--slide-size); /* Each slide takes up 33.33% of the container */
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+  height: var(--slide-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 30px;
+  border-radius: 10px;
+  transition: transform 0.5s ease-out;
+}
+
+.embla__slide_two:hover{
+  transform: translateY(-10px);
+  animation: ease-out linear;
+}
+
+
+/* Small devices (phones) */
+@media (max-width: 767px) {
+  .embla_two {
+    --slide-size: 90%; /* One slide per view */
+  }
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .embla_two {
+    --slide-size: 50%; /* Two slides per view */
+  }
+}
+
+/* Large devices (desktops) */
+@media (min-width: 1024px) {
+  .embla_two {
+    --slide-size: 33.33%; /* Three slides per view */
+  }
+}
+/* Embla slider end */
+
+.price {
+  border-radius: 100% 0% 0% 100% / 0% 0% 100% 97%;
+  width: 80px; /* Initial width */
+  height:80px; /* Initial height */
+  right: 0;
+  transition: none; /* Disable regular transition */
+}
+
+.price-hover-container:hover .price {
+  animation: expandPrice 0.6s ease-out forwards; /* Trigger the animation */
+}
+
+@keyframes expandPrice {
+  0% {
+    width: 60px;
+    height: 70px;
+    border-radius: 100% 0% 0% 100% / 0% 0% 100% 97%;
+      transform: translateY(0);
+      opacity: 0;
+      
+  }
+  100% {
+    width: 160px;
+    height: 80px;
+    border-radius: 100% 0% 0% 100% / 0% 0% 100% 100%;
+    transform: translateY(100%);
+      opacity: 1;
+  }
+}
+
+
+.pricing-bg{
+  background-image: url('../public//images/background.svg');
+  padding-top: 140px;
+  padding-bottom: 140px;
+}
+
+.card-body:hover h3{
+  background-color: #004975;
+  color: white;
+}
+
+
+
+
+
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px; /* small */
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px; /* tab */
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px; /* large device */
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px; /* large desktop */
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px; /* extra large device */
+  }
+}

@@ -1,0 +1,230 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  password       String
+  name           String?
+  phone          String?
+  role           Role          @default(CUSTOMER)
+  expertise      String?
+  address        Address?
+  assignedOrders Order[]       @relation("AssignedOrders")
+  orders         Order[]       @relation("UserOrders")
+  certificates   Certificate[] // Relation to certificates
+  siteSettings   SiteSettings?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  street    String
+  city      String
+  postcode  String
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id                 String           @id @default(cuid())
+  userId             String
+  user               User             @relation("UserOrders", fields: [userId], references: [id], onDelete: Cascade)
+  assignedEngineerId String?
+  assignedEngineer   User?            @relation("AssignedOrders", fields: [assignedEngineerId], references: [id])
+  status             OrderStatus      @default(PENDING)
+  paymentStatus      PaymentStatus    @default(UNPAID)
+  paymentMethod      PaymentMethod    @default(CREDIT_CARD)
+
+  subTotal     Float
+  vat          Float
+  totalPrice   Float
+
+  // parkingOptions     ParkingOptions   @default(NO)
+  // isCongestionZone   Boolean
+  // inspectionTime     InspectionTime
+  // orderNotes         String?
+  // totalPrice         Float
+  // date               DateTime
+  // propertyType       PropertyType
+  // residentialType    ResidentialType?
+  // commercialType     CommercialType?
+  // packages           Package[]
+
+  invoice            String           @unique
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
+model Certificate {
+  id          String    @id @default(cuid())
+  serviceName String    
+  issuedBy    String    
+  dateOfIssue DateTime  
+  expiryDate  DateTime? 
+  userId      String    
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  createdAt   DateTime  @default(now())  
+  updatedAt   DateTime  @updatedAt       
+}
+
+
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      @default(5)
+  title     String
+  userName  String
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model Package {
+//   id              String           @id @default(cuid())
+//   name            String
+//   description     String?
+//   category        PackageCategory
+//   serviceName     String
+//   type            PackageType?
+//   propertyType    PropertyType
+//   residentialType ResidentialType?
+//   commercialType  CommercialType?
+//   unitType        String?
+//   price           Float
+//   orderId         String?
+//   order           Order?           @relation(fields: [orderId], references: [id])
+//   createdAt       DateTime         @default(now())
+//   updatedAt       DateTime         @updatedAt
+// }
+
+model SiteSettings {
+  id              String            @id @default(cuid())
+  email           String?
+  phone1          String?
+  phone2          String?
+  whatsapp        String?
+  websiteUrl      String?
+  facebookUrl     String?
+  twitterUrl      String?
+  instagramUrl    String?
+  userId          String            @unique
+  user            User              @relation(fields: [userId], references: [id])
+  openingDateTime OpeningDateTime[]
+  updatedAt       DateTime          @updatedAt
+}
+
+model OpeningDateTime {
+  id             String       @id @default(cuid())
+  dayOfWeek      DayOfWeek
+  openingTime    String
+  closingTime    String
+  siteSettingsId String
+  siteSettings   SiteSettings @relation(fields: [siteSettingsId], references: [id], onDelete: Cascade)
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum PropertyType {
+  RESIDENTIAL
+  COMMERCIAL
+  NOT_APPLICABLE
+}
+
+enum ResidentialType {
+  BUNGALOW
+  MID_TERRACED_HOUSE
+  DETACHED_HOUSE
+  SEMI_DETACHED_HOUSE
+  FLAT
+  APARTMENT
+  OTHER
+}
+
+enum CommercialType {
+  PUB
+  STORE
+  OFFICE
+  RESTAURANT
+  WAREHOUSE
+  OTHER
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PARTIALLY_PAID
+  PAID
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  CASH_TO_ENGINEER
+  BANK_TRANSFER
+}
+
+enum ParkingOptions {
+  PAID
+  FREE
+  NO
+}
+
+enum InspectionTime {
+  MORNING
+  AFTERNOON
+  EVENING
+}
+
+enum PackageCategory {
+  ELECTRICAL
+  FIRE
+  GAS
+  HEALTH_SAFETY
+}
+
+enum PackageType {
+  CERTIFICATE
+  REPAIR
+  INSTALLATION
+  INSPECTION
+  OTHER
+}
+
+// enum CertificateCategory {
+//   ELECTRICAL
+//   FIRE
+//   GAS
+//   HEALTH_SAFETY
+//   OTHER
+// }
